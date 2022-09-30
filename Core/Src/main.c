@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "SoftwareTimer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -134,18 +134,9 @@ void update7SEG ( int index ) {
  }
  }
 
-
-int counter = 100;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
-	if( index_led > 3)
-		index_led = 0;
-	 	 counter --;
-	if ( counter == 0) {
-	 counter = 100;
-	 // Update value of LED7SEG every 0.25 seconds
-	 update7SEG ( index_led ++) ;
-	 }
+	timerRun();
  }
 
 int hour = 15 , minute = 8 , second = 50;
@@ -203,22 +194,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
- while (1) {
-   second ++;
-   if ( second >= 60) {
-	   second = 0;
-	   minute ++;
+  setTimer1 (1000) ;
+while (1) {
+   if( timer1_flag == 1) {
+   HAL_GPIO_TogglePin ( LED_RED_GPIO_Port , LED_RED_Pin ) ;
+   setTimer1 (2000) ;
    }
-   if( minute >= 60) {
-	   minute = 0;
-	   hour ++;
-   }
-   if( hour >=24) {
-	   hour = 0;
-   }
-   	   updateClockBuffer () ;
-   	   HAL_Delay (1000) ;
  }
 
   /* USER CODE END 3 */
