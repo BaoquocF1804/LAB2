@@ -98,37 +98,54 @@ void display7SEG ( int num ){
  }
 }
 /* Private user code ---------------------------------------------------------*/
+
 /* USER CODE BEGIN 0 */
-int counter = 200;
+const int MAX_LED = 4;
+int index_led = 0;
+int led_buffer [4] = {1 , 2 , 3 , 4};
+void update7SEG ( int index ) {
+ switch ( index ) {
+ 	 case 0:
+ // Display the first 7 SEG with led_buffer [0]
+ 		 HAL_GPIO_WritePin ( EN0_GPIO_Port , EN0_Pin , 0) ;
+ 		 HAL_GPIO_WritePin ( GPIOA , EN1_Pin | EN2_Pin | EN3_Pin , 1) ;
+ 		 display7SEG ( led_buffer [ index ]) ;
+ 		 break ;
+ 	 case 1:
+ // Display the first 7 SEG with led_buffer [1]
+ 		 HAL_GPIO_WritePin ( EN1_GPIO_Port , EN1_Pin , 0) ;
+ 		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN2_Pin | EN3_Pin , 1) ;
+ 		 display7SEG ( led_buffer [ index ]) ;
+ 		 break ;
+ 	 case 2:
+ // Display the first 7 SEG with led_buffer [2]
+ 		 HAL_GPIO_WritePin ( EN2_GPIO_Port , EN2_Pin , 0) ;
+ 		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN1_Pin | EN3_Pin , 1) ;
+ 		 display7SEG ( led_buffer [ index ]) ;
+ 		 break ;
+ 	 case 3:
+ // Display the first 7 SEG with led_buffer [3]
+ 		 HAL_GPIO_WritePin ( EN3_GPIO_Port , EN3_Pin , 0) ;
+ 		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN1_Pin | EN2_Pin , 1) ;
+ 		 display7SEG ( led_buffer [ index ]) ;
+ 		 break ;
+ 	 default :
+ 		 break ;
+ }
+ }
+
+
+int counter = 100;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
-	 if( counter == 200) {
- // LED7_0 turn on; LED7_1 , LED7_2 , LED7_3 turn off in0 ,5 seconds
- // Two Led RED turn on
-		 HAL_GPIO_WritePin ( EN0_GPIO_Port , EN0_Pin , 0) ;
-		 HAL_GPIO_WritePin ( GPIOA , EN1_Pin | EN2_Pin | EN3_Pin , 1) ;
-		 HAL_GPIO_WritePin ( DOT_GPIO_Port , DOT_Pin , 0) ;
-		 display7SEG (1) ;
-	 } else if( counter == 150) {
- // LED7_1 turn on; LED7_0 , LED7_2 , LED7_3 turn off in0 ,5 seconds
-		 HAL_GPIO_WritePin ( EN1_GPIO_Port , EN1_Pin , 0) ;
-		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN2_Pin | EN3_Pin , 1) ;
-		 display7SEG (2) ;
-	 } else if( counter == 100) {
- // LED7_2 turn on; LED7_0 , LED7_1 , LED7_3 turn off in 0 ,5 seconds
- // Two Led RED turn off
-		 HAL_GPIO_WritePin ( EN2_GPIO_Port , EN2_Pin , 0) ;
-		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN1_Pin | EN3_Pin , 1) ;
-		 HAL_GPIO_WritePin ( DOT_GPIO_Port , DOT_Pin , 1) ;
-		 display7SEG (3) ;
-	 } else if( counter == 50) {
- // LED7_3 turn on; LED7_0 , LED7_1 , LED7_2 turn off in0 ,5 seconds
-		 HAL_GPIO_WritePin ( EN3_GPIO_Port , EN3_Pin , 0) ;
-		 HAL_GPIO_WritePin ( GPIOA , EN0_Pin | EN1_Pin | EN2_Pin , 1) ;
-		 display7SEG (0) ;
+	if( index_led > 3)
+		index_led = 0;
+	counter --;
+	if ( counter == 0) {
+		counter = 100;
+	 // Update value of LED7SEG every second
+		update7SEG ( index_led ++) ;
 	 }
-	 counter --;
-	 if ( counter == 0) counter = 200;
  }
 
 /* USER CODE END 0 */
