@@ -135,16 +135,16 @@ void update7SEG ( int index ) {
  }
 
 
-int counter = 100;
+int counter = 25;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
 	if( index_led > 3)
 		index_led = 0;
-	counter --;
+	 	 counter --;
 	if ( counter == 0) {
-		counter = 100;
-	 // Update value of LED7SEG every second
-		update7SEG ( index_led ++) ;
+	 counter = 25;
+	 // Update value of LED7SEG every 0.25 seconds
+	 update7SEG ( index_led ++) ;
 	 }
  }
 

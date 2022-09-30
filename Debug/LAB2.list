@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00016224  00000000  00000000  0002a540  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000091fd  00000000  00000000  00040764  2**0
+ 17 .debug_line   000091fb  00000000  00000000  00040764  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00081c37  00000000  00000000  00049961  2**0
+ 18 .debug_str    00081c37  00000000  00000000  0004995f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000cb598  2**0
+ 19 .comment      00000050  00000000  00000000  000cb596  2**0
                   CONTENTS, READONLY
  20 .debug_frame  00002614  00000000  00000000  000cb5e8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -356,7 +356,7 @@ void update7SEG ( int index ) {
 0800033c <HAL_TIM_PeriodElapsedCallback>:
 
 
-int counter = 100;
+int counter = 25;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
  800033c:	b580      	push	{r7, lr}
@@ -372,7 +372,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
  800034c:	4b0d      	ldr	r3, [pc, #52]	; (8000384 <HAL_TIM_PeriodElapsedCallback+0x48>)
  800034e:	2200      	movs	r2, #0
  8000350:	601a      	str	r2, [r3, #0]
-	counter --;
+	 	 counter --;
  8000352:	4b0d      	ldr	r3, [pc, #52]	; (8000388 <HAL_TIM_PeriodElapsedCallback+0x4c>)
  8000354:	681b      	ldr	r3, [r3, #0]
  8000356:	3b01      	subs	r3, #1
@@ -383,12 +383,12 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
  800035e:	681b      	ldr	r3, [r3, #0]
  8000360:	2b00      	cmp	r3, #0
  8000362:	d10a      	bne.n	800037a <HAL_TIM_PeriodElapsedCallback+0x3e>
-		counter = 100;
+	 counter = 25;
  8000364:	4b08      	ldr	r3, [pc, #32]	; (8000388 <HAL_TIM_PeriodElapsedCallback+0x4c>)
- 8000366:	2264      	movs	r2, #100	; 0x64
+ 8000366:	2219      	movs	r2, #25
  8000368:	601a      	str	r2, [r3, #0]
-	 // Update value of LED7SEG every second
-		update7SEG ( index_led ++) ;
+	 // Update value of LED7SEG every 0.25 seconds
+	 update7SEG ( index_led ++) ;
  800036a:	4b06      	ldr	r3, [pc, #24]	; (8000384 <HAL_TIM_PeriodElapsedCallback+0x48>)
  800036c:	681b      	ldr	r3, [r3, #0]
  800036e:	1c5a      	adds	r2, r3, #1
