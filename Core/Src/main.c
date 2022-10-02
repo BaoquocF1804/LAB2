@@ -52,9 +52,7 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
-
 /* Private user code ---------------------------------------------------------*/
-
 /* USER CODE BEGIN 0 */
 void display7SEG ( int num ){
  switch ( num ) {
@@ -159,6 +157,105 @@ void updateClockBuffer () {
  	 }
 }
 
+void displayDOT ( uint8_t num ) { // LSB (0) = > MSB (7)
+	HAL_GPIO_WritePin ( EMM0_GPIO_Port , EMM7_Pin , !( num & 0x01 )) ;
+	HAL_GPIO_WritePin ( EMM1_GPIO_Port , EMM6_Pin , !( num & 0x02 )) ;
+	HAL_GPIO_WritePin ( EMM2_GPIO_Port , EMM5_Pin , !( num & 0x04 )) ;
+	HAL_GPIO_WritePin ( EMM3_GPIO_Port , EMM4_Pin , !( num & 0x08 )) ;
+	HAL_GPIO_WritePin ( EMM4_GPIO_Port , EMM3_Pin , !( num & 0x10 )) ;
+	HAL_GPIO_WritePin ( EMM5_GPIO_Port , EMM2_Pin , !( num & 0x20 )) ;
+	HAL_GPIO_WritePin ( EMM6_GPIO_Port , EMM1_Pin , !( num & 0x40 )) ;
+	HAL_GPIO_WritePin ( EMM7_GPIO_Port , EMM0_Pin , !( num & 0x80 )) ;
+ }
+
+void clearMatrix () {
+ HAL_GPIO_WritePin ( ROW0_GPIO_Port , ROW0_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW1_GPIO_Port , ROW1_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW2_GPIO_Port , ROW2_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW3_GPIO_Port , ROW3_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW4_GPIO_Port , ROW4_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW5_GPIO_Port , ROW5_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW6_GPIO_Port , ROW6_Pin , 1) ;
+ HAL_GPIO_WritePin ( ROW7_GPIO_Port , ROW7_Pin , 1) ;
+}
+
+uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // Character "A" in hex values .
+
+
+void updateLEDMatrix (int index ) {
+ switch ( index ) {
+ 	 case 0:
+		displayDOT ( matrix_buffer [0]) ;
+		HAL_GPIO_WritePin ( ROW7_GPIO_Port , ROW7_Pin , 1) ;
+		HAL_GPIO_WritePin ( ROW0_GPIO_Port , ROW0_Pin , 0) ;
+		break ;
+ 	 case 1:
+ 		 displayDOT ( matrix_buffer [1]) ;
+ 		 HAL_GPIO_WritePin ( ROW0_GPIO_Port , ROW0_Pin , 1) ;
+ 		 HAL_GPIO_WritePin ( ROW1_GPIO_Port , ROW1_Pin , 0) ;
+ 		 break ;
+ 	 case 2:
+ 		 displayDOT ( matrix_buffer [2]) ;
+ 		 HAL_GPIO_WritePin ( ROW1_GPIO_Port , ROW1_Pin , 1) ;
+ 		 HAL_GPIO_WritePin ( ROW2_GPIO_Port , ROW2_Pin , 0) ;
+ 		 break ;
+ 	 case 3:
+ 		 displayDOT ( matrix_buffer [3]) ;
+ 		 HAL_GPIO_WritePin ( ROW2_GPIO_Port , ROW2_Pin , 1) ;
+ 		 HAL_GPIO_WritePin ( ROW3_GPIO_Port , ROW3_Pin , 0) ;
+ 		 break ;
+ 	 case 4:
+ 		 displayDOT ( matrix_buffer [4]) ;
+ 		 HAL_GPIO_WritePin ( ROW3_GPIO_Port , ROW3_Pin , 1) ;
+ 		 HAL_GPIO_WritePin ( ROW4_GPIO_Port , ROW4_Pin , 0) ;
+ 		 break ;
+ 	 case 5:
+ 		 displayDOT ( matrix_buffer [5]) ;
+ 		 HAL_GPIO_WritePin ( ROW4_GPIO_Port , ROW4_Pin , 1) ;
+ 		 HAL_GPIO_WritePin ( ROW5_GPIO_Port , ROW5_Pin , 0) ;
+ 		 break ;
+	 case 6:
+		 displayDOT ( matrix_buffer [6]) ;
+		 HAL_GPIO_WritePin ( ROW5_GPIO_Port , ROW5_Pin , 1) ;
+		 HAL_GPIO_WritePin ( ROW6_GPIO_Port , ROW6_Pin , 0) ;
+		 break ;
+	 case 7:
+		 displayDOT ( matrix_buffer [7]) ;
+		 HAL_GPIO_WritePin ( ROW6_GPIO_Port , ROW6_Pin , 1) ;
+		 HAL_GPIO_WritePin ( ROW7_GPIO_Port , ROW7_Pin , 0) ;
+		 break ;
+	 default :
+	 break ;
+	 }
+ }
+
+
+//void shiftBit () {
+// // Shift MSB to LSB matrix_buffer [0]
+// int msb = ( matrix_buffer [0] & 0x80 ) >> 7;
+// matrix_buffer [0] = ( matrix_buffer [0] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [1]
+// msb = ( matrix_buffer [1] & 0x80 ) >> 7;
+// matrix_buffer [1] = ( matrix_buffer [1] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [2]
+// msb = ( matrix_buffer [2] & 0x80 ) >> 7;
+// matrix_buffer [2] = ( matrix_buffer [2] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [3]
+// msb = ( matrix_buffer [3] & 0x80 ) >> 7;
+// matrix_buffer [3] = ( matrix_buffer [3] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [4]
+// msb = ( matrix_buffer [4] & 0x80 ) >> 7;
+// matrix_buffer [4] = ( matrix_buffer [4] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [5]
+// msb = ( matrix_buffer [5] & 0x80 ) >> 7;
+// matrix_buffer [5] = ( matrix_buffer [5] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [6]
+// msb = ( matrix_buffer [6] & 0x80 ) >> 7;
+// matrix_buffer [6] = ( matrix_buffer [6] << 1) + msb ;
+// // Shift MSB to LSB matrix_buffer [7]
+// msb = ( matrix_buffer [7] & 0x80 ) >> 7;
+// matrix_buffer [7] = ( matrix_buffer [7] << 1) + msb ;
+// }
 /* USER CODE END 0 */
 
 /**
@@ -196,31 +293,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-setTimer1 (10) ;
-setTimer2 (10) ;
-while (1) {
-   if( timer1_flag == 1) {
-	   HAL_GPIO_TogglePin ( LED_RED_GPIO_Port , LED_RED_Pin ) ;
-	   setTimer1 (100) ;
-	   second ++;
-	   if( second >= 60) {
-	   	   second = 0;
-	   	   minute ++;
-	      }
-	   if( minute >= 60) {
-	   	   minute = 0;
-	   	   hour ++;
-	      }
-	   if( hour >= 24)
-	   	   hour = 0;
-	   updateClockBuffer () ;
-   	  }
+// uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // Character "A" in hex values .
+ setTimer2 (10) ;
+ int index = 0;
+ clearMatrix () ;
+ while (1)
+ {
 	if( timer2_flag == 1) {
-		setTimer2 (250) ; // The switching time between each seven - segment leds is 0.25 seconds
-		if( index_led > 3) index_led = 0;
-		update7SEG ( index_led ++) ;
+		setTimer2 (4) ;
+		updateLEDMatrix ( index ++) ;
+		if( index > 7) {
+			index = 0;
 		}
 	}
+ }
   /* USER CODE END 3 */
 }
 
@@ -239,7 +325,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -249,9 +337,9 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
@@ -274,6 +362,7 @@ static void MX_TIM2_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
 
@@ -293,15 +382,28 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -319,29 +421,43 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
-                          |EN2_Pin|EN3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, EMM0_Pin|EMM1_Pin|DOT_Pin|LED_RED_Pin
+                          |EN0_Pin|EN1_Pin|EN2_Pin|EN3_Pin
+                          |EMM2_Pin|EMM3_Pin|EMM4_Pin|EMM5_Pin
+                          |EMM6_Pin|EMM7_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED7_0_Pin|LED7_1_Pin|LED7_2_Pin|LED7_3_Pin
-                          |LED7_4_Pin|LED7_5_Pin|LED7_6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED7_0_Pin|LED7_1_Pin|LED7_2_Pin|ROW2_Pin
+                          |ROW3_Pin|ROW7_Pin|LED7_3_Pin|LED7_4_Pin
+                          |LED7_5_Pin|LED7_6_Pin|ROW0_Pin|ROW1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : DOT_Pin LED_RED_Pin EN0_Pin EN1_Pin
-                           EN2_Pin EN3_Pin */
-  GPIO_InitStruct.Pin = DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
-                          |EN2_Pin|EN3_Pin;
+  /*Configure GPIO pins : EMM0_Pin EMM1_Pin DOT_Pin LED_RED_Pin
+                           EN0_Pin EN1_Pin EN2_Pin EN3_Pin
+                           EMM2_Pin EMM3_Pin EMM4_Pin EMM5_Pin
+                           EMM6_Pin EMM7_Pin */
+  GPIO_InitStruct.Pin = EMM0_Pin|EMM1_Pin|DOT_Pin|LED_RED_Pin
+                          |EN0_Pin|EN1_Pin|EN2_Pin|EN3_Pin
+                          |EMM2_Pin|EMM3_Pin|EMM4_Pin|EMM5_Pin
+                          |EMM6_Pin|EMM7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED7_0_Pin LED7_1_Pin LED7_2_Pin LED7_3_Pin
-                           LED7_4_Pin LED7_5_Pin LED7_6_Pin */
-  GPIO_InitStruct.Pin = LED7_0_Pin|LED7_1_Pin|LED7_2_Pin|LED7_3_Pin
-                          |LED7_4_Pin|LED7_5_Pin|LED7_6_Pin;
+  /*Configure GPIO pins : LED7_0_Pin LED7_1_Pin LED7_2_Pin ROW2_Pin
+                           ROW3_Pin ROW7_Pin LED7_3_Pin LED7_4_Pin
+                           LED7_5_Pin LED7_6_Pin ROW0_Pin ROW1_Pin */
+  GPIO_InitStruct.Pin = LED7_0_Pin|LED7_1_Pin|LED7_2_Pin|ROW2_Pin
+                          |ROW3_Pin|ROW7_Pin|LED7_3_Pin|LED7_4_Pin
+                          |LED7_5_Pin|LED7_6_Pin|ROW0_Pin|ROW1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ROW4_Pin ROW5_Pin ROW6_Pin */
+  GPIO_InitStruct.Pin = ROW4_Pin|ROW5_Pin|ROW6_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
