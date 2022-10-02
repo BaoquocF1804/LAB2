@@ -52,6 +52,10 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+
+/* USER CODE BEGIN 0 */
 void display7SEG ( int num ){
  switch ( num ) {
  	 case 0:
@@ -97,13 +101,12 @@ void display7SEG ( int num ){
  		 break;
  }
 }
-/* Private user code ---------------------------------------------------------*/
 
-/* USER CODE BEGIN 0 */
+
 const int MAX_LED = 4;
 int index_led = 0;
 int led_buffer [4] = {1 , 2 , 3 , 4};
-void update7SEG ( int index ) {
+void update7SEG ( int index) {
  switch ( index ) {
  	 case 0:
  // Display the first 7 SEG with led_buffer [0]
@@ -133,7 +136,6 @@ void update7SEG ( int index ) {
  		 break ;
  }
  }
-
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
 	timerRun();
@@ -194,14 +196,31 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer1 (1000) ;
+setTimer1 (10) ;
+setTimer2 (10) ;
 while (1) {
    if( timer1_flag == 1) {
-   HAL_GPIO_TogglePin ( LED_RED_GPIO_Port , LED_RED_Pin ) ;
-   setTimer1 (2000) ;
-   }
- }
-
+	   HAL_GPIO_TogglePin ( LED_RED_GPIO_Port , LED_RED_Pin ) ;
+	   setTimer1 (100) ;
+	   second ++;
+	   if( second >= 60) {
+	   	   second = 0;
+	   	   minute ++;
+	      }
+	   if( minute >= 60) {
+	   	   minute = 0;
+	   	   hour ++;
+	      }
+	   if( hour >= 24)
+	   	   hour = 0;
+	   updateClockBuffer () ;
+   	  }
+	if( timer2_flag == 1) {
+		setTimer2 (250) ; // The switching time between each seven - segment leds is 0.25 seconds
+		if( index_led > 3) index_led = 0;
+		update7SEG ( index_led ++) ;
+		}
+	}
   /* USER CODE END 3 */
 }
 
