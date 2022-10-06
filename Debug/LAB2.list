@@ -352,7 +352,7 @@ void clearMatrix () {
 
 0800034c <updateLEDMatrix>:
 
-uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // Character "A" in hex values .
+uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // 	 .
 
 
 void updateLEDMatrix (int index ) {
@@ -581,32 +581,32 @@ int main(void)
  80004dc:	607b      	str	r3, [r7, #4]
  clearMatrix () ;
  80004de:	f7ff feff 	bl	80002e0 <clearMatrix>
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	  if( timer2_flag == 1) {
+ while (1)
+   {
+     /* USER CODE END WHILE */
+ 	  if( timer2_flag == 1) {
  80004e2:	4b0a      	ldr	r3, [pc, #40]	; (800050c <main+0x54>)
  80004e4:	681b      	ldr	r3, [r3, #0]
  80004e6:	2b01      	cmp	r3, #1
  80004e8:	d1fb      	bne.n	80004e2 <main+0x2a>
-	   setTimer2 (100) ;
+ 	   setTimer2 (100) ;
  80004ea:	2064      	movs	r0, #100	; 0x64
  80004ec:	f7ff fe2e 	bl	800014c <setTimer2>
 
-	   updateLEDMatrix ( index ++) ;
+ 	   updateLEDMatrix ( index ++) ;
  80004f0:	687b      	ldr	r3, [r7, #4]
  80004f2:	1c5a      	adds	r2, r3, #1
  80004f4:	607a      	str	r2, [r7, #4]
  80004f6:	4618      	mov	r0, r3
  80004f8:	f7ff ff28 	bl	800034c <updateLEDMatrix>
-	   if( index > 7) {
+ 	   if( index > 7) {
  80004fc:	687b      	ldr	r3, [r7, #4]
  80004fe:	2b07      	cmp	r3, #7
  8000500:	ddef      	ble.n	80004e2 <main+0x2a>
-	   index = 0;
+ 	   index = 0;
  8000502:	2300      	movs	r3, #0
  8000504:	607b      	str	r3, [r7, #4]
-	  if( timer2_flag == 1) {
+ 	  if( timer2_flag == 1) {
  8000506:	e7ec      	b.n	80004e2 <main+0x2a>
  8000508:	20000044 	.word	0x20000044
  800050c:	2000003c 	.word	0x2000003c
@@ -749,9 +749,9 @@ static void MX_TIM2_Init(void)
  80005bc:	4b19      	ldr	r3, [pc, #100]	; (8000624 <MX_TIM2_Init+0x94>)
  80005be:	2200      	movs	r2, #0
  80005c0:	609a      	str	r2, [r3, #8]
-  htim2.Init.Period = 9;
+  htim2.Init.Period = 2;
  80005c2:	4b18      	ldr	r3, [pc, #96]	; (8000624 <MX_TIM2_Init+0x94>)
- 80005c4:	2209      	movs	r2, #9
+ 80005c4:	2202      	movs	r2, #2
  80005c6:	60da      	str	r2, [r3, #12]
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
  80005c8:	4b16      	ldr	r3, [pc, #88]	; (8000624 <MX_TIM2_Init+0x94>)

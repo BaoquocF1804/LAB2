@@ -85,7 +85,7 @@ void clearMatrix () {
  HAL_GPIO_WritePin ( ROW7_GPIO_Port , ROW7_Pin , 1) ;
 }
 
-uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // Character "A" in hex values .
+uint8_t matrix_buffer [8] = {0x18 ,0x3c ,0x66 ,0x66 ,0x7e ,0x66 ,0x66 ,0x66 }; // 	 .
 
 
 void updateLEDMatrix (int index ) {
@@ -202,20 +202,19 @@ int main(void)
  setTimer2 (10) ;
  int index = 0;
  clearMatrix () ;
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	  if( timer2_flag == 1) {
-	   setTimer2 (100) ;
+ while (1)
+   {
+     /* USER CODE END WHILE */
+ 	  if( timer2_flag == 1) {
+ 	   setTimer2 (100) ;
+ 	   updateLEDMatrix ( index ++) ;
+ 	   if( index > 7) {
+ 	   index = 0;
+ 	   }
+ 	  }
 
-	   updateLEDMatrix ( index ++) ;
-	   if( index > 7) {
-	   index = 0;
-	   }
-	  }
-
-    /* USER CODE BEGIN 3 */
-  }
+     /* USER CODE BEGIN 3 */
+   }
   /* USER CODE END 3 */
 }
 
@@ -278,7 +277,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 9;
+  htim2.Init.Period = 2;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
