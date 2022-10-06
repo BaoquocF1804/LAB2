@@ -206,7 +206,7 @@ int main(void)
    {
      /* USER CODE END WHILE */
  	  if( timer2_flag == 1) {
- 	   setTimer2 (100) ;
+ 	   setTimer2 (1000) ;
  	   updateLEDMatrix ( index ++) ;
  	   if( index > 7) {
  	   index = 0;
@@ -277,7 +277,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 2;
+  htim2.Init.Period = 1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
